@@ -205,7 +205,7 @@ int isLeadByte(unsigned int cp, unsigned char ucByte)
 
 
 struct entitymap {
-	char* entity;
+	const char* entity;
 	char mappedchar;
 };
 
@@ -219,7 +219,7 @@ struct entitymap entities[] = {
 };
 
 
-char decodeMnemonic(unsigned char* mnemonic)
+char decodeMnemonic(const char* mnemonic)
 {
 	int i = 0;
 	while (entities[i].entity != NULL)
@@ -236,7 +236,7 @@ int ScriptDecoder(unsigned char* inname, unsigned char* outname, unsigned int cp
 {
 	unsigned char inbuf[LEN_INBUF + 1];
 	unsigned char outbuf[LEN_OUTBUF + 1];
-	unsigned char c, c1, c2, lenbuf[7], csbuf[7], htmldec[8];
+	unsigned char c, c1, c2, lenbuf[7], csbuf[7]; char htmldec[8];
 	unsigned char marker[] = "#@~^";
 	int ustate, nextstate, state = 0;
 	int i, j, k, m, ml, hd = 0;
