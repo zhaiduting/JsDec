@@ -44,6 +44,28 @@
 #define STATE_WAIT_FOR_OPEN 113
 #define STATE_HTMLENCODE	114
 
+/* 功 能：将str字符串中的oldstr字符串替换为newstr字符串
+* 参 数：str：操作目标 oldstr：被替换者 newstr：替换者
+* 返回值：返回替换之后的字符串
+* 版 本： V1.2
+*/
+
+char* strrpc(char* str, char* oldstr, char* newstr) {
+	char bstr[LEN_INBUF];//转换缓冲区
+	memset(bstr, 0, sizeof(bstr));
+	for (int i = 0; i < strlen(str); i++) {
+		if (!strncmp(str + i, oldstr, strlen(oldstr))) {//查找目标字符串
+			strcat(bstr, newstr);
+			i += strlen(oldstr) - 1;
+		}
+		else {
+			strncat(bstr, str + i, 1);//保存一字节进缓冲区
+		}
+	}
+	strcpy(str, bstr);
+	return str;
+}
+
 unsigned char rawData[292] = {
 		0x64,0x37,0x69, 0x50,0x7E,0x2C, 0x22,0x5A,0x65, 0x4A,0x45,0x72,
 		0x61,0x3A,0x5B, 0x5E,0x79,0x66, 0x5D,0x59,0x75, 0x5B,0x27,0x4C,
@@ -285,6 +307,9 @@ int ScriptDecoder(unsigned char* inname, unsigned char* outname, unsigned int cp
 
 		if (j == LEN_OUTBUF)
 		{
+			char sub[] = "JScript.Encode";
+			char replace[] = "JScript       ";
+			strrpc((char*)outbuf, sub, replace);
 			fwrite(outbuf, sizeof(char), j, outfile);
 			j = 0;
 		}
